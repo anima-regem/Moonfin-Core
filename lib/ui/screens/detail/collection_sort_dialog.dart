@@ -28,7 +28,7 @@ Future<void> showCollectionSortDialog(
     context: context,
     builder: (dialogContext) {
       return AlertDialog(
-        backgroundColor: const Color(0xFF1E1E24),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         title: Text(
           l10n.playlistSortOptions,
           style: Theme.of(dialogContext).textTheme.titleLarge?.copyWith(

@@ -20,15 +20,3 @@ flutter:
     - family: Inter
       fonts:
         - asset: assets/fonts/Inter.ttf
-    - family: Barlow
-      fonts:
-        - asset: assets/fonts/Barlow-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/Barlow-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/Barlow-Bold.ttf
-          weight: 700
-    - family: BarlowCondensed
-      fonts:
-        - asset: assets/fonts/BarlowCondensed-Bold.ttf
-          weight: 700

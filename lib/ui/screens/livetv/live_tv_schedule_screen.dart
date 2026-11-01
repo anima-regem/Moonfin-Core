@@ -51,7 +51,7 @@ class _LiveTvScheduleScreenState extends State<LiveTvScheduleScreen> {
 
   Widget _buildScreenContent(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: _buildContent(),
       ),
@@ -120,7 +120,7 @@ class _LiveTvScheduleScreenState extends State<LiveTvScheduleScreen> {
     final confirmed = await showFocusRestoringDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog.adaptive(
-        backgroundColor: const Color(0xFF1A1A2E),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         title: Text(
           l10n.cancelRecording,
           style: const TextStyle(color: Colors.white),

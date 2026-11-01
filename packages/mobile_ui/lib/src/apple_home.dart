@@ -6,7 +6,7 @@ class _AppleHome extends StatelessWidget {
   final _Feed feed;
   @override
   Widget build(BuildContext context) => ColoredBox(
-    color: CinemaStyle.black,
+    color: CinemaTheme.of(context).background,
     child: SafeArea(
       bottom: false,
       child: CustomScrollView(
@@ -27,6 +27,7 @@ class _AppleHome extends StatelessWidget {
                     child: Text(
                       'Home',
                       style: CinemaStyle.text(
+                        context,
                         MobileCinemaMode.appleTv,
                         35,
                         weight: FontWeight.w700,
@@ -38,7 +39,7 @@ class _AppleHome extends StatelessWidget {
                     icon: CinemaGlyph.more,
                     label: 'Appearance',
                     onPressed: state._appearance,
-                    background: const Color(0xFF242426),
+                    background: CinemaTheme.of(context).raised,
                     size: 20,
                   ),
                   const SizedBox(width: 10),
@@ -144,6 +145,7 @@ class _AppleFeaturedState extends State<_AppleFeatured> {
                         child: Text(
                           'moonfin',
                           style: CinemaStyle.text(
+                            context,
                             MobileCinemaMode.appleTv,
                             15,
                             weight: FontWeight.w600,
@@ -170,6 +172,7 @@ class _AppleFeaturedState extends State<_AppleFeatured> {
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,
                               style: CinemaStyle.text(
+                                context,
                                 MobileCinemaMode.appleTv,
                                 12,
                                 color: const Color(0xFFDBDBDF),

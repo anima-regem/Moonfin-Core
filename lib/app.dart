@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/gestures.dart'
     show kBackMouseButton, kForwardMouseButton;
-import 'package:flutter/cupertino.dart' show CupertinoTheme, CupertinoThemeData;
+import 'package:flutter/cupertino.dart'
+    show CupertinoTheme, CupertinoThemeData, CupertinoTextThemeData;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_tvos/flutter_tvos.dart'
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:playback_core/playback_core.dart';
+import 'package:moonfin_mobile_ui/moonfin_mobile_ui.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'auth/repositories/session_repository.dart';
@@ -67,11 +69,14 @@ import 'util/idiom/glass_capability.dart';
 import 'util/platform_detection.dart';
 import 'util/tv_ui_scale.dart';
 import 'ui/widgets/overlay_sheet.dart';
+
 import 'package:moonfin_design/moonfin_design.dart';
+
 import 'util/focus/key_event_utils.dart';
 import 'util/focus/gamepad/gamepad_navigation_scope.dart';
 import 'util/focus/gamepad/gamepad_key_synthesizer.dart';
 import 'util/focus/open_popup.dart';
+
 import 'package:custom_tv_text_field/custom_tv_text_field.dart';
 
 class MoonfinApp extends StatefulWidget {
@@ -95,7 +100,7 @@ class _MoonfinAppState extends State<MoonfinApp> {
         _prefs.set(UserPreferences.keyboardStyle, style);
     _themeController = AppThemeController.fromPreferences(_prefs);
     _lastResolvedLocale = _resolveLocale();
-    AppUiIdiomResolver.setOverride(_prefs.get(UserPreferences.interfaceStyle));
+    AppUiIdiomResolver.setOverride(_resolvedInterfaceStyle);
     GlassCapability.apply(_prefs.get(UserPreferences.glassQuality));
     _prefs.addListener(_syncThemeFromPrefs);
     _prefs.addListener(_syncLocaleFromPrefs);
@@ -141,9 +146,28 @@ class _MoonfinAppState extends State<MoonfinApp> {
     _themeController.refreshFromPreferences(_prefs);
   }
 
+  MobileCinemaMode? get _cinemaMode =>
+      PlatformDetection.useMobileUi &&
+          _prefs.get(UserPreferences.mobileCinemaEnabled) &&
+          !_prefs.get(UserPreferences.kidsModeEnabled)
+      ? MobileCinemaMode.fromPreference(
+          _prefs.get(UserPreferences.mobileCinemaMode),
+        )
+      : null;
+
+  InterfaceStyle get _resolvedInterfaceStyle {
+    final preferred = _prefs.get(UserPreferences.interfaceStyle);
+    if (preferred != InterfaceStyle.automatic || _cinemaMode == null) {
+      return preferred;
+    }
+    return _cinemaMode == MobileCinemaMode.appleTv
+        ? InterfaceStyle.apple
+        : InterfaceStyle.material;
+  }
+
   void _syncIdiomFromPrefs() {
     final before = AppUiIdiomResolver.current;
-    AppUiIdiomResolver.setOverride(_prefs.get(UserPreferences.interfaceStyle));
+    AppUiIdiomResolver.setOverride(_resolvedInterfaceStyle);
     if (AppUiIdiomResolver.current != before && mounted) {
       setState(() {});
     }
@@ -236,12 +260,15 @@ class _MoonfinAppState extends State<MoonfinApp> {
       child: AppThemeScope(
         controller: _themeController,
         child: AnimatedBuilder(
-          animation: _themeController,
+          animation: Listenable.merge([_themeController, _prefs]),
           builder: (context, _) {
             return MaterialApp.router(
               onGenerateTitle: (context) =>
                   AppLocalizations.of(context).appTitle,
-              theme: AppTheme.buildTheme(_themeController.activeSpec),
+              theme: AppTheme.buildTheme(
+                _themeController.activeSpec,
+                cinemaMode: _cinemaMode,
+              ),
               routerConfig: appRouter,
               debugShowCheckedModeBanner: false,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -371,6 +398,45 @@ class _MoonfinAppState extends State<MoonfinApp> {
                                   data: CupertinoThemeData(
                                     brightness: Brightness.dark,
                                     primaryColor: AppColorScheme.accent,
+                                    barBackgroundColor: AppColorScheme.surface,
+                                    textTheme: CupertinoTextThemeData(
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge,
+                                      actionTextStyle: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(
+                                            color: AppColorScheme.accent,
+                                          ),
+                                      actionSmallTextStyle: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium
+                                          ?.copyWith(
+                                            color: AppColorScheme.accent,
+                                          ),
+                                      tabLabelTextStyle: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall,
+                                      navTitleTextStyle: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                      navLargeTitleTextStyle: Theme.of(context)
+                                          .textTheme
+                                          .headlineLarge,
+                                      navActionTextStyle: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(
+                                            color: AppColorScheme.accent,
+                                          ),
+                                      pickerTextStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge,
+                                      dateTimePickerTextStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge,
+                                    ),
                                     scaffoldBackgroundColor:
                                         AppColorScheme.background,
                                   ),
@@ -396,18 +462,11 @@ class _MoonfinAppState extends State<MoonfinApp> {
                     final scale = _prefs
                         .get(UserPreferences.desktopUiScale)
                         .scaleFactor;
-                    final systemScale = MediaQuery.textScalerOf(
-                      context,
-                    ).scale(1.0);
-                    // The pixel font renders far larger and wider than a normal
-                    // face at a given size, so shrink all text to keep dense
-                    // layouts from overflowing.
-                    final pixelScale = AppColorScheme.isPixel ? 0.6 : 1.0;
+                    final systemScale = MediaQuery.textScalerOf(context)
+                        .scale(1.0);
                     return MediaQuery(
                       data: MediaQuery.of(context).copyWith(
-                        textScaler: TextScaler.linear(
-                          scale * systemScale * pixelScale,
-                        ),
+                        textScaler: TextScaler.linear(scale * systemScale),
                       ),
                       child: mainChild,
                     );
@@ -845,11 +904,13 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
       return true;
     }
 
-    final altPressed = keys.contains(LogicalKeyboardKey.altLeft) ||
+    final altPressed =
+        keys.contains(LogicalKeyboardKey.altLeft) ||
         keys.contains(LogicalKeyboardKey.altRight);
 
     if (PlatformDetection.useDesktopUi &&
-        (key == LogicalKeyboardKey.f11 || (key == LogicalKeyboardKey.enter && altPressed))) {
+        (key == LogicalKeyboardKey.f11 ||
+            (key == LogicalKeyboardKey.enter && altPressed))) {
       unawaited(FullscreenHelper.toggle());
       return true;
     }
@@ -1030,10 +1091,12 @@ class _GlobalShortcutScopeState extends State<_GlobalShortcutScope>
 
     final key = event.logicalKey;
     final keys = HardwareKeyboard.instance.logicalKeysPressed;
-    final altPressed = keys.contains(LogicalKeyboardKey.altLeft) ||
+    final altPressed =
+        keys.contains(LogicalKeyboardKey.altLeft) ||
         keys.contains(LogicalKeyboardKey.altRight);
 
-    if ((key == LogicalKeyboardKey.enter || key == LogicalKeyboardKey.select) && !altPressed) {
+    if ((key == LogicalKeyboardKey.enter || key == LogicalKeyboardKey.select) &&
+        !altPressed) {
       return activateFocusedTarget(context);
     }
 

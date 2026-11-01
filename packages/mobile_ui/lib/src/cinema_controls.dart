@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import 'mobile_models.dart';
+import 'cinema_theme.dart';
 
 abstract final class CinemaStyle {
   static const white = Color(0xFFFFFFFF);
@@ -13,20 +14,19 @@ abstract final class CinemaStyle {
   static const blue = Color(0xFF0A84FF);
 
   static TextStyle text(
+    BuildContext context,
     MobileCinemaMode mode,
     double size, {
     FontWeight weight = FontWeight.w400,
-    Color color = white,
+    Color? color,
     double? spacing,
     double? height,
   }) => TextStyle(
-    fontFamily: mode == MobileCinemaMode.appleTv
-        ? '.SF UI Text'
-        : 'packages/moonfin_mobile_ui/Barlow',
-    fontFamilyFallback: const ['packages/moonfin_mobile_ui/Inter'],
+    fontFamily: CinemaTheme.of(context).fontFamily,
+    fontFamilyFallback: CinemaTheme.of(context).fontFamilyFallback,
     fontSize: size,
     fontWeight: weight,
-    color: color,
+    color: color ?? CinemaTheme.of(context).foreground,
     letterSpacing: spacing,
     height: height,
     decoration: TextDecoration.none,
@@ -57,20 +57,27 @@ class CinemaIcon extends StatelessWidget {
     this.glyph, {
     super.key,
     this.size = 24,
-    this.color = CinemaStyle.white,
+    this.color,
     this.filled = false,
     this.stroke = 1.65,
   });
   final CinemaGlyph glyph;
   final double size, stroke;
-  final Color color;
+  final Color? color;
   final bool filled;
 
   @override
   Widget build(BuildContext context) => ExcludeSemantics(
     child: SizedBox.square(
       dimension: size,
-      child: CustomPaint(painter: _SymbolPainter(glyph, color, filled, stroke)),
+      child: CustomPaint(
+        painter: _SymbolPainter(
+          glyph,
+          color ?? CinemaTheme.of(context).foreground,
+          filled,
+          stroke,
+        ),
+      ),
     ),
   );
 }
@@ -297,9 +304,14 @@ class _CinemaPressableState extends State<CinemaPressable> {
             child: DecoratedBox(
               position: DecorationPosition.foreground,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(widget.radius),
+                borderRadius: BorderRadius.circular(
+                  CinemaTheme.of(context).radius == 0 ? 0 : widget.radius,
+                ),
                 border: _focused
-                    ? Border.all(color: CinemaStyle.white, width: 2)
+                    ? Border.all(
+                        color: CinemaTheme.of(context).accent,
+                        width: 2,
+                      )
                     : null,
               ),
               child: widget.child,
@@ -331,8 +343,9 @@ class CinemaButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final apple = mode == MobileCinemaMode.appleTv;
-    final radius = apple ? 15.0 : 4.0;
-    final foreground = primary && !dark ? CinemaStyle.black : CinemaStyle.white;
+    final palette = CinemaTheme.of(context);
+    final radius = palette.radius;
+    final foreground = primary && !dark ? palette.onAccent : palette.foreground;
     return CinemaPressable(
       label: label,
       selected: selected,
@@ -342,11 +355,7 @@ class CinemaButton extends StatelessWidget {
         constraints: const BoxConstraints(minHeight: 50),
         padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 12),
         decoration: BoxDecoration(
-          color: primary
-              ? dark
-                    ? const Color(0xFF262628)
-                    : CinemaStyle.white
-              : const Color(0xFF343434),
+          color: primary && !dark ? palette.accent : palette.raised,
           borderRadius: BorderRadius.circular(radius),
         ),
         child: Row(
@@ -362,6 +371,7 @@ class CinemaButton extends StatelessWidget {
                 label,
                 textAlign: TextAlign.center,
                 style: CinemaStyle.text(
+                  context,
                   mode,
                   apple ? 16 : 17,
                   weight: FontWeight.w600,
@@ -384,14 +394,14 @@ class CinemaIconButton extends StatelessWidget {
     required this.onPressed,
     this.size = 23,
     this.background,
-    this.color = CinemaStyle.white,
+    this.color,
   });
   final CinemaGlyph icon;
   final String label;
   final VoidCallback? onPressed;
   final double size;
   final Color? background;
-  final Color color;
+  final Color? color;
   @override
   Widget build(BuildContext context) => CinemaPressable(
     label: label,
@@ -436,14 +446,16 @@ Future<T?> showCinemaSheet<T>(
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(mode == MobileCinemaMode.appleTv ? 24 : 12),
+          top: Radius.circular(
+            CinemaTheme.of(context).radius == 0
+                ? 0
+                : CinemaTheme.of(context).radius + 6,
+          ),
         ),
         child: ColoredBox(
-          color: mode == MobileCinemaMode.appleTv
-              ? const Color(0xFF1C1C1E)
-              : const Color(0xFF181818),
+          color: CinemaTheme.of(context).surface,
           child: DefaultTextStyle(
-            style: CinemaStyle.text(mode, 15),
+            style: CinemaStyle.text(context, mode, 15),
             child: SafeArea(top: false, child: builder(context)),
           ),
         ),
@@ -470,7 +482,12 @@ Future<void> showCinemaModePicker(
             Expanded(
               child: Text(
                 'Appearance',
-                style: CinemaStyle.text(mode, 27, weight: FontWeight.w700),
+                style: CinemaStyle.text(
+                  context,
+                  mode,
+                  27,
+                  weight: FontWeight.w700,
+                ),
               ),
             ),
             CinemaIconButton(
@@ -500,6 +517,7 @@ Future<void> showCinemaModePicker(
                         Text(
                           value.label,
                           style: CinemaStyle.text(
+                            context,
                             mode,
                             20,
                             weight: FontWeight.w600,
@@ -511,9 +529,10 @@ Future<void> showCinemaModePicker(
                               ? 'Editorial. Immersive. Unmistakably Apple.'
                               : 'Bold. Personal. Straight into the story.',
                           style: CinemaStyle.text(
+                            context,
                             mode,
                             13,
-                            color: CinemaStyle.secondary,
+                            color: CinemaTheme.of(context).muted,
                           ),
                         ),
                       ],
@@ -522,9 +541,7 @@ Future<void> showCinemaModePicker(
                   if (value == mode)
                     CinemaIcon(
                       CinemaGlyph.check,
-                      color: mode == MobileCinemaMode.appleTv
-                          ? CinemaStyle.blue
-                          : CinemaStyle.red,
+                      color: CinemaTheme.of(context).accent,
                     ),
                 ],
               ),
@@ -544,19 +561,31 @@ class CinemaNavigationBar extends StatelessWidget {
     required this.mode,
     required this.selected,
     required this.onSelected,
+    this.homeLabel = 'Home',
+    this.libraryLabel = 'Library',
+    this.downloadsLabel = 'Downloads',
+    this.searchLabel = 'Search',
+    this.profileLabel = 'My Moonfin',
   });
   final MobileCinemaMode mode;
   final CinemaDestination selected;
   final ValueChanged<CinemaDestination> onSelected;
+  final String homeLabel,
+      libraryLabel,
+      downloadsLabel,
+      searchLabel,
+      profileLabel;
 
-  Widget _item(CinemaDestination value, CinemaGlyph icon, String label) {
+  Widget _item(
+    BuildContext context,
+    CinemaDestination value,
+    CinemaGlyph icon,
+    String label,
+  ) {
     final active = selected == value;
     final apple = mode == MobileCinemaMode.appleTv;
-    final color = active
-        ? apple
-              ? CinemaStyle.blue
-              : CinemaStyle.white
-        : const Color(0xFF929296);
+    final palette = CinemaTheme.of(context);
+    final color = active ? palette.accent : palette.muted;
     return Expanded(
       child: CinemaPressable(
         label: label,
@@ -583,6 +612,7 @@ class CinemaNavigationBar extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: CinemaStyle.text(
+                  context,
                   mode,
                   apple ? 10 : 11,
                   weight: active ? FontWeight.w600 : FontWeight.w400,
@@ -600,22 +630,40 @@ class CinemaNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     if (mode == MobileCinemaMode.netflix) {
       return ColoredBox(
-        color: const Color(0xFF121212),
+        color: CinemaTheme.of(context).surface,
         child: SafeArea(
           top: false,
           child: Row(
             children: [
-              _item(CinemaDestination.home, CinemaGlyph.home, 'Home'),
-              _item(CinemaDestination.search, CinemaGlyph.search, 'Search'),
               _item(
-                CinemaDestination.downloads,
-                CinemaGlyph.download,
-                'Downloads',
+                context,
+                CinemaDestination.home,
+                CinemaGlyph.home,
+                homeLabel,
               ),
               _item(
+                context,
+                CinemaDestination.search,
+                CinemaGlyph.search,
+                searchLabel,
+              ),
+              _item(
+                context,
+                CinemaDestination.library,
+                CinemaGlyph.library,
+                libraryLabel,
+              ),
+              _item(
+                context,
+                CinemaDestination.downloads,
+                CinemaGlyph.download,
+                downloadsLabel,
+              ),
+              _item(
+                context,
                 CinemaDestination.profile,
                 CinemaGlyph.person,
-                'My Moonfin',
+                profileLabel,
               ),
             ],
           ),
@@ -630,23 +678,34 @@ class CinemaNavigationBar extends StatelessWidget {
         children: [
           Expanded(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(34),
+              borderRadius: BorderRadius.circular(
+                CinemaTheme.of(context).radius == 0 ? 0 : 34,
+              ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
                 child: ColoredBox(
-                  color: const Color(0xE52B2B2F),
+                  color: CinemaTheme.of(
+                    context,
+                  ).surface.withValues(alpha: 0.94),
                   child: Row(
                     children: [
-                      _item(CinemaDestination.home, CinemaGlyph.home, 'Home'),
                       _item(
-                        CinemaDestination.library,
-                        CinemaGlyph.library,
-                        'Library',
+                        context,
+                        CinemaDestination.home,
+                        CinemaGlyph.home,
+                        homeLabel,
                       ),
                       _item(
+                        context,
+                        CinemaDestination.library,
+                        CinemaGlyph.library,
+                        libraryLabel,
+                      ),
+                      _item(
+                        context,
                         CinemaDestination.downloads,
                         CinemaGlyph.download,
-                        'Downloads',
+                        downloadsLabel,
                       ),
                     ],
                   ),
@@ -657,13 +716,24 @@ class CinemaNavigationBar extends StatelessWidget {
           const SizedBox(width: 10),
           CinemaIconButton(
             icon: CinemaGlyph.search,
-            label: 'Search',
+            label: searchLabel,
             size: 23,
             color: selected == CinemaDestination.search
-                ? CinemaStyle.blue
-                : CinemaStyle.white,
-            background: const Color(0xE52B2B2F),
+                ? CinemaTheme.of(context).accent
+                : CinemaTheme.of(context).foreground,
+            background: CinemaTheme.of(context).surface.withValues(alpha: 0.94),
             onPressed: () => onSelected(CinemaDestination.search),
+          ),
+          const SizedBox(width: 10),
+          CinemaIconButton(
+            icon: CinemaGlyph.person,
+            label: profileLabel,
+            size: 21,
+            color: selected == CinemaDestination.profile
+                ? CinemaTheme.of(context).accent
+                : CinemaTheme.of(context).foreground,
+            background: CinemaTheme.of(context).surface.withValues(alpha: 0.94),
+            onPressed: () => onSelected(CinemaDestination.profile),
           ),
         ],
       ),

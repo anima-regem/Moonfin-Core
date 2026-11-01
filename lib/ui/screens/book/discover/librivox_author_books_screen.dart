@@ -23,7 +23,7 @@ class LibrivoxAuthorBooksScreen extends StatelessWidget {
     final isMobile =
         PlatformDetection.useMobileUi || MediaQuery.sizeOf(context).width < 600;
     return Scaffold(
-      backgroundColor: const Color(0xFF0F182A),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,

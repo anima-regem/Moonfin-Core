@@ -252,7 +252,7 @@ Future<bool> _showDeleteConfirmationDialog(
   final confirmed = await showFocusRestoringDialog<bool>(
     context: context,
     builder: (ctx) => AlertDialog.adaptive(
-      backgroundColor: const Color(0xFF171717),
+      backgroundColor: AppColorScheme.surface,
       title: Text(title, style: const TextStyle(color: Colors.white)),
       content: Text(message, style: const TextStyle(color: Colors.white70)),
       actions: [
@@ -683,7 +683,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen>
     body = PopScope(canPop: !wasCollapsedRecently, child: body);
     return RequestInitialFocus(
       targetNode: node,
-      child: Scaffold(backgroundColor: Colors.black, body: body),
+      child: Scaffold(backgroundColor: AppColorScheme.background, body: body),
     );
   }
 
@@ -3509,7 +3509,7 @@ class _DetailContentState extends State<_DetailContent> {
     final ok = await showFocusRestoringDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog.adaptive(
-        backgroundColor: const Color(0xFF171717),
+        backgroundColor: AppColorScheme.surface,
         title: Text(
           l10n.deleteDownloadedAlbum,
           style: const TextStyle(color: Colors.white),
@@ -3581,7 +3581,7 @@ class _DetailContentState extends State<_DetailContent> {
     final newName = await showFocusRestoringDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog.adaptive(
-        backgroundColor: const Color(0xFF171717),
+        backgroundColor: AppColorScheme.surface,
         title: Text(
           l10n.renamePlaylist,
           style: const TextStyle(color: Colors.white),
@@ -5028,7 +5028,7 @@ class _BookAuthorDetailScreenState extends State<_BookAuthorDetailScreen> {
     final data = _data;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0F182A),
+      backgroundColor: AppColorScheme.background,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -5242,7 +5242,7 @@ class _AuthorHeader extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 42,
-          backgroundColor: const Color(0xFF1E3A5F),
+          backgroundColor: AppColorScheme.surfaceVariant,
           child: ClipOval(
             child: SizedBox(
               width: 84,
@@ -8078,7 +8078,7 @@ class DetailActionButtonsState extends State<DetailActionButtons> {
       context: context,
       builder: (dialogCtx) {
         return AlertDialog(
-          backgroundColor: const Color(0xFF1E1E24),
+          backgroundColor: AppColorScheme.surface,
           title: Text(
             l10n.adminControls,
             style: const TextStyle(
@@ -11761,7 +11761,7 @@ class _DownloadButtonState extends State<_DownloadButton> {
         await showFocusRestoringModalBottomSheet<List<AggregatedItem>>(
           context: context,
           isScrollControlled: PlatformDetection.isTV,
-          backgroundColor: const Color(0xFF1E1E1E),
+          backgroundColor: AppColorScheme.surface,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
           ),
@@ -12151,7 +12151,7 @@ class _DownloadButtonState extends State<_DownloadButton> {
       return showFocusRestoringModalBottomSheet<DownloadQuality>(
         context: context,
         isScrollControlled: true,
-        backgroundColor: const Color(0xFF1E1E1E),
+        backgroundColor: AppColorScheme.surface,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
         ),
@@ -12197,7 +12197,7 @@ class _DownloadButtonState extends State<_DownloadButton> {
 
     return showFocusRestoringModalBottomSheet<DownloadQuality>(
       context: context,
-      backgroundColor: const Color(0xFF1E1E1E),
+      backgroundColor: AppColorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -12389,7 +12389,7 @@ class _DeleteDownloadButtonState extends State<_DeleteDownloadButton> {
     final confirmed = await showFocusRestoringDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog.adaptive(
-        backgroundColor: const Color(0xFF1E1E1E),
+        backgroundColor: AppColorScheme.surface,
         title: Text(
           AppLocalizations.of(ctx).deleteDownloadedFiles,
           style: const TextStyle(color: Colors.white),

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 
 import '../theme_spec.dart';
+import '../app_typography.dart';
 
 const neonPulseThemeSpec = ThemeSpec(
   id: 'neon_pulse',
   displayName: 'Neon Pulse',
-  fontFamily: 'NeonPulseDisplay',
-  textGlow: [Shadow(color: Color(0x6600E5FF), blurRadius: 8)],
   navColorCycle: [Color(0xFFFF2E92), Color(0xFF00E5FF)],
   transparentNavbarSurface: true,
+  fontFamily: AppTypography.fontFamily,
   colors: ThemeColorTokens(
+    card: Color(0xCC1E0A3F),
     background: Color(0xFF0B0420),
-    onBackground: Color(0xFF00E5FF),
+    onBackground: Color(0xFFF5F2FA),
     surface: Color(0xCC1E0A3F),
-    onSurface: Color(0xFF00E5FF),
+    onSurface: Color(0xFFF5F2FA),
     surfaceVariant: Color(0xCC1E0A3F),
     scrim: Color(0xCC0B0420),
     accent: Color(0xFFFF2E92),
@@ -49,15 +50,8 @@ const neonPulseThemeSpec = ThemeSpec(
     chipRadius: BorderRadius.all(Radius.circular(8)),
     chipBackground: Color(0x00000000),
     focusGlow: [
-      BoxShadow(
-        color: Color(0x99FF2E92),
-        blurRadius: 8,
-        spreadRadius: 0.5,
-      ),
-      BoxShadow(
-        color: Color(0x6600E5FF),
-        blurRadius: 5,
-      ),
+      BoxShadow(color: Color(0x99FF2E92), blurRadius: 8, spreadRadius: 0.5),
+      BoxShadow(color: Color(0x6600E5FF), blurRadius: 5),
     ],
     navBorder: BorderSide(color: Color(0xCCFF2E92), width: 1.0),
   ),

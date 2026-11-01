@@ -7,8 +7,10 @@ class _NetflixHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Stack(
     children: [
-      const Positioned.fill(child: ColoredBox(color: CinemaStyle.black)),
-      const Positioned(
+      Positioned.fill(
+        child: ColoredBox(color: CinemaTheme.of(context).background),
+      ),
+      Positioned(
         top: 0,
         left: 0,
         right: 0,
@@ -18,7 +20,11 @@ class _NetflixHome extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Color(0xFF493426), Color(0xFF211A16), Color(0xFF000000)],
+              colors: [
+                CinemaTheme.of(context).accent.withValues(alpha: 0.22),
+                CinemaTheme.of(context).background,
+                CinemaTheme.of(context).background,
+              ],
             ),
           ),
         ),
@@ -44,15 +50,15 @@ class _NetflixHome extends StatelessWidget {
                         child: CinemaPressable(
                           label: 'Appearance',
                           onPressed: state._appearance,
-                          child: const Text(
+                          child: Text(
                             'MOONFIN',
-                            style: TextStyle(
-                              fontFamily: 'BarlowCondensed',
-                              package: 'moonfin_mobile_ui',
-                              fontSize: 30,
-                              letterSpacing: 1.2,
-                              color: CinemaStyle.red,
-                              fontWeight: FontWeight.w700,
+                            style: CinemaStyle.text(
+                              context,
+                              MobileCinemaMode.netflix,
+                              30,
+                              spacing: 1.2,
+                              color: CinemaTheme.of(context).accent,
+                              weight: FontWeight.w700,
                             ),
                           ),
                         ),
@@ -172,6 +178,7 @@ class _NetflixFeatured extends StatelessWidget {
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.ellipsis,
                             style: CinemaStyle.text(
+                              context,
                               MobileCinemaMode.netflix,
                               12,
                               color: const Color(0xFFF0EAE5),

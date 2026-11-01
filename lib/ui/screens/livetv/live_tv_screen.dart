@@ -25,7 +25,7 @@ class LiveTvScreen extends StatelessWidget {
     return RequestInitialFocus(
       child: _showNavbar
           ? Scaffold(
-              backgroundColor: Colors.black,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               body: NavigationLayout(showBackButton: true, child: page),
             )
           : page,
@@ -70,15 +70,15 @@ class LiveTvScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              const Color(0xFF07111F),
-              const Color(0xFF0F2238),
+              AppColorScheme.background,
+              AppColorScheme.surface,
               AppColorScheme.accent.withValues(alpha: 0.18),
             ],
           ),

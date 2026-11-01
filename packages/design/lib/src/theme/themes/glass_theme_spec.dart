@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme_spec.dart';
+import '../app_typography.dart';
 
 const glassThemeSpec = ThemeSpec(
   id: 'glass',
@@ -16,7 +17,9 @@ const glassThemeSpec = ThemeSpec(
     mediaTypeBadgeMovie: Color(0xFF0A84FF),
     mediaTypeBadgeShow: Color(0xFFBF5AF2),
   ),
+  fontFamily: AppTypography.fontFamily,
   colors: ThemeColorTokens(
+    card: Color(0xD91A1F2B),
     background: Color(0xCC07090F),
     onBackground: Color(0xFFFFFFFF),
     surface: Color(0xD90E1117),

@@ -9,10 +9,10 @@ import '../../horizontal_scroll_section.dart';
 import '../../offline_aware_image.dart';
 import '../book_see_all_button.dart';
 
-/// The Reading Room's serif, for library, section and title headings.
+/// Reading Room headings share the app's typography and fallback fonts.
 TextStyle readingRoomSerif(double size, {Color? color}) => TextStyle(
-  fontFamily: 'Literata',
-  fontFamilyFallback: const ['Georgia', 'serif'],
+  fontFamily: ThemeRegistry.active.fontFamily ?? AppTypography.fontFamily,
+  fontFamilyFallback: AppTypography.fontFamilyFallback,
   fontSize: size,
   height: 1.15,
   fontWeight: FontWeight.w600,

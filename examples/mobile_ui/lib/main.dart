@@ -146,7 +146,7 @@ class _ShowcaseHomeState extends State<_ShowcaseHome> {
                     const SizedBox(width: 10),
                     Text(
                       'Playback preview',
-                      style: CinemaStyle.text(_mode, 17),
+                      style: CinemaStyle.text(context, _mode, 17),
                     ),
                   ],
                 ),
@@ -163,12 +163,18 @@ class _ShowcaseHomeState extends State<_ShowcaseHome> {
                 const SizedBox(height: 26),
                 Text(
                   item.title,
-                  style: CinemaStyle.text(_mode, 32, weight: FontWeight.w700),
+                  style: CinemaStyle.text(
+                    context,
+                    _mode,
+                    32,
+                    weight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 12),
                 Text(
                   'Playback starts from your connected media server in Moonfin. This preview lets you explore the interface.',
                   style: CinemaStyle.text(
+                    context,
                     _mode,
                     16,
                     height: 1.5,
@@ -201,7 +207,7 @@ class _ShowcaseHomeState extends State<_ShowcaseHome> {
           child: ColoredBox(
             color: CinemaStyle.black,
             child: DefaultTextStyle(
-              style: CinemaStyle.text(_mode, 15),
+              style: CinemaStyle.text(context, _mode, 15),
               child: Stack(
                 children: [
                   Positioned.fill(
@@ -273,6 +279,7 @@ class _ShowcaseHomeState extends State<_ShowcaseHome> {
         Text(
           _mode == MobileCinemaMode.appleTv ? 'Account' : 'My Moonfin',
           style: CinemaStyle.text(
+            context,
             _mode,
             34,
             weight: FontWeight.w700,
@@ -287,7 +294,12 @@ class _ShowcaseHomeState extends State<_ShowcaseHome> {
             Expanded(
               child: Text(
                 'Your cinema',
-                style: CinemaStyle.text(_mode, 24, weight: FontWeight.w600),
+                style: CinemaStyle.text(
+                  context,
+                  _mode,
+                  24,
+                  weight: FontWeight.w600,
+                ),
               ),
             ),
           ],
@@ -295,7 +307,7 @@ class _ShowcaseHomeState extends State<_ShowcaseHome> {
         const SizedBox(height: 38),
         Text(
           'Appearance',
-          style: CinemaStyle.text(_mode, 23, weight: FontWeight.w700),
+          style: CinemaStyle.text(context, _mode, 23, weight: FontWeight.w700),
         ),
         const SizedBox(height: 10),
         for (final mode in MobileCinemaMode.values)
@@ -314,6 +326,7 @@ class _ShowcaseHomeState extends State<_ShowcaseHome> {
                         Text(
                           mode.label,
                           style: CinemaStyle.text(
+                            context,
                             _mode,
                             18,
                             weight: FontWeight.w600,
@@ -325,6 +338,7 @@ class _ShowcaseHomeState extends State<_ShowcaseHome> {
                               ? 'Editorial browsing. Quietly cinematic.'
                               : 'Your next obsession, front and center.',
                           style: CinemaStyle.text(
+                            context,
                             _mode,
                             13,
                             color: CinemaStyle.secondary,
@@ -350,12 +364,22 @@ class _ShowcaseHomeState extends State<_ShowcaseHome> {
             Expanded(
               child: Text(
                 'My List',
-                style: CinemaStyle.text(_mode, 23, weight: FontWeight.w700),
+                style: CinemaStyle.text(
+                  context,
+                  _mode,
+                  23,
+                  weight: FontWeight.w700,
+                ),
               ),
             ),
             Text(
               '${_saved.length} titles',
-              style: CinemaStyle.text(_mode, 13, color: CinemaStyle.secondary),
+              style: CinemaStyle.text(
+                context,
+                _mode,
+                13,
+                color: CinemaStyle.secondary,
+              ),
             ),
           ],
         ),
@@ -367,7 +391,12 @@ class _ShowcaseHomeState extends State<_ShowcaseHome> {
         if (_saved.isEmpty)
           Text(
             'Add a title to make it yours.',
-            style: CinemaStyle.text(_mode, 15, color: CinemaStyle.secondary),
+            style: CinemaStyle.text(
+              context,
+              _mode,
+              15,
+              color: CinemaStyle.secondary,
+            ),
           ),
       ],
     ),
@@ -381,6 +410,7 @@ class _ShowcaseHomeState extends State<_ShowcaseHome> {
         Text(
           'Library',
           style: CinemaStyle.text(
+            context,
             _mode,
             35,
             weight: FontWeight.w700,
@@ -390,7 +420,12 @@ class _ShowcaseHomeState extends State<_ShowcaseHome> {
         const SizedBox(height: 12),
         Text(
           'Your collection, all together.',
-          style: CinemaStyle.text(_mode, 15, color: CinemaStyle.secondary),
+          style: CinemaStyle.text(
+            context,
+            _mode,
+            15,
+            color: CinemaStyle.secondary,
+          ),
         ),
         const SizedBox(height: 25),
         for (final item in demoCatalog) _libraryItem(item),
@@ -422,12 +457,18 @@ class _ShowcaseHomeState extends State<_ShowcaseHome> {
               children: [
                 Text(
                   item.title,
-                  style: CinemaStyle.text(_mode, 17, weight: FontWeight.w600),
+                  style: CinemaStyle.text(
+                    context,
+                    _mode,
+                    17,
+                    weight: FontWeight.w600,
+                  ),
                 ),
                 const SizedBox(height: 5),
                 Text(
                   item.subtitle,
                   style: CinemaStyle.text(
+                    context,
                     _mode,
                     12,
                     color: CinemaStyle.secondary,
@@ -456,6 +497,7 @@ class _ShowcaseHomeState extends State<_ShowcaseHome> {
           Text(
             'Downloads',
             style: CinemaStyle.text(
+              context,
               _mode,
               34,
               weight: FontWeight.w700,
@@ -474,7 +516,12 @@ class _ShowcaseHomeState extends State<_ShowcaseHome> {
           Center(
             child: Text(
               'Your stories. To go.',
-              style: CinemaStyle.text(_mode, 26, weight: FontWeight.w700),
+              style: CinemaStyle.text(
+                context,
+                _mode,
+                26,
+                weight: FontWeight.w700,
+              ),
             ),
           ),
           const SizedBox(height: 14),
@@ -482,6 +529,7 @@ class _ShowcaseHomeState extends State<_ShowcaseHome> {
             'Downloaded titles from your server will appear here, ready whenever you are.',
             textAlign: TextAlign.center,
             style: CinemaStyle.text(
+              context,
               _mode,
               16,
               color: CinemaStyle.secondary,

@@ -1,15 +1,18 @@
 # Moonfin mobile cinema
 
-Two mobile presentations built from the same native Flutter components used by
-Moonfin's home screen:
+Two mobile presentations built from the shared Flutter components used by
+Moonfin's home screen and app navigation:
 
-- **Apple TV:** an editorial Home header, paging artwork, SF system typography on
-  Apple devices (bundled Inter fallback elsewhere), rounded Watch Now controls,
-  landscape Up Next cards, and floating glass navigation with a separate search
-  control.
-- **Netflix:** a condensed brand wordmark, poster-led discovery, paired rectangular
+- **Apple TV:** an editorial Home header, paging artwork, rounded Watch Now
+  controls, landscape Up Next cards, and floating navigation with search and
+  profile controls.
+- **Netflix:** a bold brand wordmark, poster-led discovery, paired rectangular
   Play / My List controls, portrait Continue Watching cards with red progress,
   outlined ranking numerals for curated demo picks, and a flat navigation bar.
+
+The app supplies its selected colors, surfaces, and one UI font through the
+`CinemaTheme` theme extension. Forms, settings, dialogs, and other routes use the
+same tokens. Standalone examples use bundled Inter throughout.
 
 Switch modes through **Appearance** (the more control in Apple TV mode, the
 wordmark in Netflix mode) or the profile screen. The app saves this per profile.
@@ -63,17 +66,17 @@ keyboard activation, navigation, category filters, playback callbacks, favorite
 persistence and rollback, Cupertino loading/empty states, and both layouts on
 320px screens at standard and double text size.
 
-The core app's search, downloads, account management, full details and player
-routes remain available through their existing flows; the new home, navigation,
-appearance panel and quick details are integrated directly. The isolated preview
-also demonstrates the redesigned search and supporting pages without a server.
+The core app shares its theme across browsing, search, settings, downloads,
+account management, details, and dialogs. Home, search, library, and detail routes
+share cinema navigation. The isolated preview demonstrates the components
+without a server.
 
 ## Typography
 
-Inter, Barlow, and Barlow Condensed are bundled under the SIL Open Font License.
-Their licenses are included alongside the fonts in
-`packages/mobile_ui/assets/fonts/`. Apple system fonts are referenced by family
-name on supported devices; no proprietary Apple or Netflix fonts are bundled.
+The app uses bundled Roboto for every built-in theme, with Noto Sans and platform
+emoji fallbacks. The standalone preview bundles Inter under the SIL Open Font
+License; its license is included in `packages/mobile_ui/assets/fonts/`. Custom
+themes can provide their own font through the host theme.
 
 ## Preview artwork
 

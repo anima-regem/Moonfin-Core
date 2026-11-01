@@ -85,6 +85,7 @@ const testTrack = AggregatedItem(
 Future<({UserPreferences prefs, FakePlaybackManager playback})>
     setUpBottomNav({
   BottomNavbarStyle style = BottomNavbarStyle.dock,
+  bool cinema = false,
 }) async {
   SharedPreferences.setMockInitialValues({});
   final store = PreferenceStore();
@@ -108,6 +109,7 @@ Future<({UserPreferences prefs, FakePlaybackManager playback})>
   ThemeRegistry.setActiveById(ThemeRegistry.moonfinId);
   await prefs.set(UserPreferences.navbarPosition, NavbarPosition.bottom);
   await prefs.set(UserPreferences.bottomNavbarStyle, style);
+  await prefs.set(UserPreferences.mobileCinemaEnabled, cinema);
   return (prefs: prefs, playback: playback);
 }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import 'cinema_controls.dart';
+import 'cinema_theme.dart';
 import 'mobile_models.dart';
 
 Future<void> showCinemaDetails(
@@ -81,7 +82,7 @@ class _CinemaDetailsState extends State<_CinemaDetails> {
               AspectRatio(
                 aspectRatio: 16 / 9,
                 child: image == null
-                    ? const ColoredBox(color: Color(0xFF303034))
+                    ? ColoredBox(color: CinemaTheme.of(context).raised)
                     : widget.artworkBuilder(context, image, BoxFit.cover),
               ),
               Positioned(
@@ -109,6 +110,7 @@ class _CinemaDetailsState extends State<_CinemaDetails> {
                 Text(
                   item.title,
                   style: CinemaStyle.text(
+                    context,
                     widget.mode,
                     apple ? 29 : 27,
                     weight: FontWeight.w700,
@@ -119,9 +121,10 @@ class _CinemaDetailsState extends State<_CinemaDetails> {
                 Text(
                   item.metadata,
                   style: CinemaStyle.text(
+                    context,
                     widget.mode,
                     13,
-                    color: const Color(0xFFADADB4),
+                    color: CinemaTheme.of(context).muted,
                   ),
                 ),
                 const SizedBox(height: 22),
@@ -147,12 +150,11 @@ class _CinemaDetailsState extends State<_CinemaDetails> {
                   Text(
                     item.overview,
                     style: CinemaStyle.text(
+                      context,
                       widget.mode,
                       15,
                       height: 1.5,
-                      color: apple
-                          ? const Color(0xFFC5C5CD)
-                          : CinemaStyle.white,
+                      color: CinemaTheme.of(context).foreground,
                     ),
                   ),
                 ],
@@ -190,6 +192,7 @@ class _CinemaDetailsState extends State<_CinemaDetails> {
                     child: Text(
                       _error!,
                       style: CinemaStyle.text(
+                        context,
                         widget.mode,
                         13,
                         color: const Color(0xFFFF7D84),
@@ -225,9 +228,10 @@ class _CinemaDetailsState extends State<_CinemaDetails> {
             Text(
               text,
               style: CinemaStyle.text(
+                context,
                 widget.mode,
                 12,
-                color: CinemaStyle.secondary,
+                color: CinemaTheme.of(context).muted,
               ),
             ),
           ],
@@ -278,6 +282,7 @@ class _CinemaSearchPageState extends State<CinemaSearchPage> {
               child: Text(
                 'Search',
                 style: CinemaStyle.text(
+                  context,
                   widget.mode,
                   apple ? 35 : 29,
                   weight: FontWeight.w700,
@@ -294,33 +299,36 @@ class _CinemaSearchPageState extends State<CinemaSearchPage> {
                       controller: _query,
                       placeholder: 'Movies, shows, and more',
                       autofocus: true,
-                      style: CinemaStyle.text(widget.mode, 17),
+                      style: CinemaStyle.text(context, widget.mode, 17),
                       onChanged: widget.onQuery,
                     )
                   : CupertinoTextField(
                       controller: _query,
                       autofocus: true,
                       placeholder: 'Search for movies or shows',
-                      style: CinemaStyle.text(widget.mode, 17),
+                      style: CinemaStyle.text(context, widget.mode, 17),
                       placeholderStyle: CinemaStyle.text(
+                        context,
                         widget.mode,
                         16,
-                        color: CinemaStyle.secondary,
+                        color: CinemaTheme.of(context).muted,
                       ),
                       padding: const EdgeInsets.symmetric(
                         vertical: 16,
                         horizontal: 12,
                       ),
-                      prefix: const Padding(
-                        padding: EdgeInsets.only(left: 16),
+                      prefix: Padding(
+                        padding: const EdgeInsets.only(left: 16),
                         child: CinemaIcon(
                           CinemaGlyph.search,
-                          color: CinemaStyle.secondary,
+                          color: CinemaTheme.of(context).muted,
                         ),
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF2B2B2B),
-                        borderRadius: BorderRadius.circular(4),
+                        color: CinemaTheme.of(context).raised,
+                        borderRadius: BorderRadius.circular(
+                          CinemaTheme.of(context).radius,
+                        ),
                       ),
                       onChanged: widget.onQuery,
                       suffix: CinemaIconButton(
@@ -341,6 +349,7 @@ class _CinemaSearchPageState extends State<CinemaSearchPage> {
               child: Text(
                 _query.text.isEmpty ? 'Explore your library' : 'Search results',
                 style: CinemaStyle.text(
+                  context,
                   widget.mode,
                   apple ? 23 : 22,
                   weight: FontWeight.w700,
@@ -362,9 +371,10 @@ class _CinemaSearchPageState extends State<CinemaSearchPage> {
                 child: Text(
                   'No results. Try another title.',
                   style: CinemaStyle.text(
+                    context,
                     widget.mode,
                     16,
-                    color: CinemaStyle.secondary,
+                    color: CinemaTheme.of(context).muted,
                   ),
                 ),
               ),
@@ -388,7 +398,9 @@ class _CinemaSearchPageState extends State<CinemaSearchPage> {
                           width: apple ? 130 : 132,
                           height: 77,
                           child: art == null
-                              ? const ColoredBox(color: Color(0xFF303034))
+                              ? ColoredBox(
+                                  color: CinemaTheme.of(context).raised,
+                                )
                               : widget.artworkBuilder(
                                   context,
                                   art,
@@ -401,6 +413,7 @@ class _CinemaSearchPageState extends State<CinemaSearchPage> {
                         child: Text(
                           item.title,
                           style: CinemaStyle.text(
+                            context,
                             widget.mode,
                             16,
                             weight: FontWeight.w600,

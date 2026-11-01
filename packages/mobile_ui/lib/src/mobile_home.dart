@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 
 import 'cinema_controls.dart';
+import 'cinema_theme.dart';
 import 'mobile_models.dart';
 
 part 'apple_home.dart';
@@ -47,7 +48,10 @@ class MobileCinemaHome extends StatefulWidget {
   final MobileHomeLabels labels;
   final double bottomPadding;
 
-  static Color backgroundFor(MobileCinemaMode mode) => CinemaStyle.black;
+  static Color backgroundFor(MobileCinemaMode mode, {BuildContext? context}) =>
+      context == null
+      ? const CinemaTheme().background
+      : CinemaTheme.of(context).background;
 
   @override
   State<MobileCinemaHome> createState() => _MobileCinemaHomeState();
@@ -134,12 +138,12 @@ class _MobileCinemaHomeState extends State<MobileCinemaHome> {
     ].where((item) => _matches(item) && seen.add(item.id)).take(4).toList();
     final feed = _Feed(rails, featured);
     return CupertinoTheme(
-      data: const CupertinoThemeData(
+      data: CupertinoThemeData(
         brightness: Brightness.dark,
-        primaryColor: CinemaStyle.blue,
+        primaryColor: CinemaTheme.of(context).accent,
       ),
       child: DefaultTextStyle(
-        style: CinemaStyle.text(widget.mode, 15),
+        style: CinemaStyle.text(context, widget.mode, 15),
         child: Stack(
           children: [
             Positioned.fill(
@@ -157,14 +161,14 @@ class _MobileCinemaHomeState extends State<MobileCinemaHome> {
                   child: Container(
                     padding: const EdgeInsets.all(17),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF303034),
+                      color: CinemaTheme.of(context).raised,
                       borderRadius: BorderRadius.circular(
                         widget.mode == MobileCinemaMode.appleTv ? 16 : 4,
                       ),
                     ),
                     child: Text(
                       _notice!,
-                      style: CinemaStyle.text(widget.mode, 14),
+                      style: CinemaStyle.text(context, widget.mode, 14),
                     ),
                   ),
                 ),
@@ -195,7 +199,12 @@ class _MobileCinemaHomeState extends State<MobileCinemaHome> {
             Text(
               widget.loading ? labels.loading : labels.empty,
               textAlign: TextAlign.center,
-              style: CinemaStyle.text(widget.mode, 23, weight: FontWeight.w600),
+              style: CinemaStyle.text(
+                context,
+                widget.mode,
+                23,
+                weight: FontWeight.w600,
+              ),
             ),
             if (!widget.loading) ...[
               const SizedBox(height: 12),
@@ -203,6 +212,7 @@ class _MobileCinemaHomeState extends State<MobileCinemaHome> {
                 labels.emptyHint,
                 textAlign: TextAlign.center,
                 style: CinemaStyle.text(
+                  context,
                   widget.mode,
                   15,
                   color: CinemaStyle.secondary,
@@ -295,6 +305,7 @@ class _MobileCinemaHomeState extends State<MobileCinemaHome> {
                 child: Text(
                   names[index],
                   style: CinemaStyle.text(
+                    context,
                     widget.mode,
                     apple ? 16 : 14,
                     weight: active ? FontWeight.w600 : FontWeight.w400,
@@ -354,6 +365,7 @@ class _TitleArt extends StatelessWidget {
             maxLines: 2,
             textAlign: TextAlign.center,
             style: CinemaStyle.text(
+              context,
               mode,
               48,
               weight: FontWeight.w400,
@@ -366,6 +378,7 @@ class _TitleArt extends StatelessWidget {
             Text(
               item.titleArtSubtitle!,
               style: CinemaStyle.text(
+                context,
                 mode,
                 10,
                 spacing: 5,
@@ -381,6 +394,7 @@ class _TitleArt extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.center,
       style: CinemaStyle.text(
+        context,
         mode,
         mode == MobileCinemaMode.appleTv ? 34 : 37,
         weight: FontWeight.w700,

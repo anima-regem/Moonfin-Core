@@ -6,14 +6,17 @@ import 'package:moonfin/ui/theme/app_theme.dart';
 import 'package:moonfin/ui/widgets/grid_button_card.dart';
 
 void main() {
-  test('Neon Pulse typography applies themed display styling', () {
-    final theme = AppTheme.buildTheme(
-      ThemeRegistry.resolveById(ThemeRegistry.neonPulseId),
-    );
-
-    expect(theme.textTheme.displayLarge?.fontFamily, 'NeonPulseDisplay');
-    expect(theme.textTheme.displayLarge?.shadows?.isNotEmpty, true);
-    expect(theme.textTheme.bodyMedium?.letterSpacing, 0.6);
+  test('built-in themes share readable typography', () {
+    for (final id in ThemeRegistry.builtInIds) {
+      final theme = AppTheme.buildTheme(ThemeRegistry.resolveById(id));
+      expect(
+        theme.textTheme.displayLarge?.fontFamily,
+        AppTypography.fontFamily,
+      );
+      expect(theme.textTheme.bodyMedium?.fontFamily, AppTypography.fontFamily);
+      expect(theme.textTheme.displayLarge?.shadows, isNull);
+      expect(theme.textTheme.bodyMedium?.shadows, isNull);
+    }
   });
 
   testWidgets('Grid button renders under Moonfin and Neon Pulse', (

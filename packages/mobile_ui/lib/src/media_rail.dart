@@ -73,6 +73,7 @@ class _MediaRailState extends State<_MediaRail> {
                   child: Text(
                     widget.rail.title,
                     style: CinemaStyle.text(
+                      context,
                       widget.mode,
                       apple ? 24 : 21,
                       weight: FontWeight.w700,
@@ -191,6 +192,7 @@ class _MediaRailState extends State<_MediaRail> {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: CinemaStyle.text(
+                            context,
                             widget.mode,
                             15,
                             weight: FontWeight.w600,
@@ -203,6 +205,7 @@ class _MediaRailState extends State<_MediaRail> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: CinemaStyle.text(
+                              context,
                               widget.mode,
                               12,
                               color: CinemaStyle.secondary,
@@ -293,9 +296,8 @@ class _Rank extends StatelessWidget {
   final int value;
   @override
   Widget build(BuildContext context) {
-    const style = TextStyle(
-      fontFamily: 'BarlowCondensed',
-      package: 'moonfin_mobile_ui',
+    final style = TextStyle(
+      fontFamily: CinemaTheme.of(context).fontFamily,
       fontSize: 91,
       height: .97,
       fontWeight: FontWeight.w700,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme_spec.dart';
+import '../app_typography.dart';
 
 /// Retro 8-bit theme using the "Sweetie 16" pixel-art palette.
 /// Chrome is deliberately blocky: zero-radius corners, thick opaque borders, a
@@ -10,7 +11,6 @@ import '../theme_spec.dart';
 const eightbitHeroThemeSpec = ThemeSpec(
   id: '8bit_hero',
   displayName: '8-bit Hero',
-  fontFamily: 'EightBitHero',
   isPixel: true,
   navColorCycle: [
     Color(0xFFEF7D57),
@@ -27,7 +27,9 @@ const eightbitHeroThemeSpec = ThemeSpec(
     mediaTypeBadgeMovie: Color(0xFF3B5DC9),
     mediaTypeBadgeShow: Color(0xFFB13E53),
   ),
+  fontFamily: AppTypography.fontFamily,
   colors: ThemeColorTokens(
+    card: Color(0xFF333C57),
     background: Color(0xFF1A1C2C),
     onBackground: Color(0xFFF4F4F4),
     surface: Color(0xFF333C57),
@@ -66,8 +68,6 @@ const eightbitHeroThemeSpec = ThemeSpec(
     chipRadius: BorderRadius.zero,
     chipBackground: Color(0xFF29366F),
     navBorder: BorderSide(color: Color(0xFF566C86), width: 2),
-    focusGlow: [
-      BoxShadow(color: Color(0x99FFCD75), offset: Offset(4, 4)),
-    ],
+    focusGlow: [BoxShadow(color: Color(0x99FFCD75), offset: Offset(4, 4))],
   ),
 );

@@ -91,6 +91,7 @@ import 'home_row_prefetch.dart';
 import 'home_row_shift.dart';
 import 'home_view_model.dart';
 import 'mobile_home_content.dart';
+import '../../widgets/mobile_cinema_navigation.dart';
 import '../../widgets/seerr/seerr_genre_label.dart';
 import '../../widgets/skeleton/skeleton_home_row.dart';
 import '../../widgets/skeleton/skeleton_shimmer.dart';
@@ -551,7 +552,7 @@ class _HomeShellState extends State<_HomeShell>
           if (!didPop) _showExitConfirmation(context);
         },
         child: Scaffold(
-          backgroundColor: MobileCinemaHome.backgroundFor(mode),
+          backgroundColor: MobileCinemaHome.backgroundFor(mode, context: context),
           extendBody: mode == MobileCinemaMode.appleTv,
           body: MobileHomeContent(
             viewModel: _viewModel,
@@ -605,10 +606,10 @@ class _HomeShellState extends State<_HomeShell>
               }
             },
           ),
-          bottomNavigationBar: MobileHomeNavigation(
-            viewModel: _viewModel,
+          bottomNavigationBar: MobileCinemaNavigation(
+            activeRoute: Destinations.home,
+            onHome: () => _viewModel.refresh(preserveExisting: true),
             preferences: _userPrefs,
-            onLibrary: (item) => _ContentRowsState._navigateToLibrary(context, item),
           ),
         ),
       );

@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../app_colors.dart';
 import '../theme_spec.dart';
+import '../app_typography.dart';
 
 const moonfinThemeSpec = ThemeSpec(
   id: 'moonfin',
   displayName: 'Moonfin',
+  fontFamily: AppTypography.fontFamily,
   colors: ThemeColorTokens(
+    card: Color(0xFF202020),
     background: AppColors.black700,
     onBackground: AppColors.white,
     surface: AppColors.black500,

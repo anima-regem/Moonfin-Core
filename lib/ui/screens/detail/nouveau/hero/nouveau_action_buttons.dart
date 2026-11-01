@@ -1487,7 +1487,7 @@ class _NouveauOverflowDialog extends StatelessWidget {
     final phone = _nouveauActionsUsePhoneLayout(context);
 
     return Dialog(
-      backgroundColor: const Color(0xFF17181A),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       surfaceTintColor: Colors.transparent,
       insetPadding: EdgeInsets.symmetric(
         horizontal: phone ? 20 : 48.0 * scale,
